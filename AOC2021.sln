@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOC2021_Day1", "AOC2021_Day1.csproj", "{9F7B6829-46E2-4082-AF62-B666782B392E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AOC2021_Day1", "AOC2021_Day1\AOC2021_Day1.csproj", "{9F7B6829-46E2-4082-AF62-B666782B392E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOC2021_Day2", "AOC2021_Day2\AOC2021_Day2.csproj", "{C946DEB5-C305-414D-AFFE-76A621B2602C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{9F7B6829-46E2-4082-AF62-B666782B392E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F7B6829-46E2-4082-AF62-B666782B392E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F7B6829-46E2-4082-AF62-B666782B392E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C946DEB5-C305-414D-AFFE-76A621B2602C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C946DEB5-C305-414D-AFFE-76A621B2602C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C946DEB5-C305-414D-AFFE-76A621B2602C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C946DEB5-C305-414D-AFFE-76A621B2602C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
