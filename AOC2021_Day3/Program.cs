@@ -2,48 +2,40 @@
 
 Console.WriteLine("Hello, Advent of Code 2021!");
 
-var lines = File.ReadAllLines("Day3a.txt");
-var powerConsumption = 0;
-var gammaRate = 0;
-var epsilonRate = 0;
-var gammaRateBin = new StringBuilder();
-var epsilonRateBin = new StringBuilder();
+var linesOriginal = File.ReadAllLines("Day3a.txt");
+var linesForOxigenGenRating = linesOriginal.ToArray();
+var linesForCo2GenRating = linesOriginal.ToArray();
 
-var bitCounts = new List<BitCount>();
-for (int i = 0; i < lines[0].Length; i++)
+var i = 0;
+while (linesForOxigenGenRating.Length > 1 && i < linesForOxigenGenRating[0].Length)
 {
-    bitCounts.Add(new BitCount());
+    var bc = new BitCount(linesForOxigenGenRating, i);
+    bc.Count();
+
+    var filterBit = bc.Ones>= bc.Zeros ? '1' : '0';
+
+    linesForOxigenGenRating = linesForOxigenGenRating.Where(l => l[i] == filterBit).ToArray();
+    i++;
 }
 
-for (int i = 0; i < lines.Length; i++)
+var oxigenGeneratorRating = Convert.ToInt32(linesForOxigenGenRating[0], 2);
+Console.WriteLine(oxigenGeneratorRating);
+
+i = 0;
+while (linesForCo2GenRating.Length > 1 && i < linesForCo2GenRating[0].Length)
 {
-    var line = lines[i];
-    for (int j = 0; j < line.Length; j++)
-    {
-        if (line[j] == '0')
-        {
-            bitCounts[j].Zeros++;
-        }
-        else
-        {
-            bitCounts[j].Ones++;
-        }
-    }
+    var bc = new BitCount(linesForCo2GenRating, i);
+    bc.Count();
+
+    var filterBit = bc.Zeros <= bc.Ones ? '0' : '1';
+
+    linesForCo2GenRating = linesForCo2GenRating.Where(l => l[i] == filterBit).ToArray();
+    i++;
 }
 
-foreach (var bitCount in bitCounts)
-{
-    gammaRateBin.Append(bitCount.Ones > bitCount.Zeros ? "1" : "0");
-    epsilonRateBin.Append(bitCount.Ones > bitCount.Zeros ? "0" : "1");
-}
-
-gammaRate = Convert.ToInt32(gammaRateBin.ToString(), 2);
-epsilonRate = Convert.ToInt32(epsilonRateBin.ToString(), 2);
-
-powerConsumption = gammaRate * epsilonRate;
-
-Console.WriteLine(powerConsumption);
-
+var co2GeneratorRating = Convert.ToInt32(linesForCo2GenRating[0], 2);
+Console.WriteLine(co2GeneratorRating);
+Console.WriteLine(co2GeneratorRating * oxigenGeneratorRating);
 
 
 
@@ -54,7 +46,35 @@ Console.WriteLine(powerConsumption);
 
 class BitCount
 {
+    public BitCount(string[] lines, int pos)
+    {
+        Lines = lines;
+        Pos = pos;
+    }
+
+    public string[] Lines { get; set; }
+
+    public int Pos { get; set; }
+
     public int Zeros { get; set; } = 0;
     public int Ones { get; set; } = 0;
+
+    public void Count()
+    {
+        for (int i = 0; i < Lines.Length; i++)
+        {
+
+            if (Lines[i][Pos] == '0')
+            {
+                Zeros++;
+            }
+            else
+            {
+                Ones++;
+            }
+
+        }
+    }
+
 }
 
