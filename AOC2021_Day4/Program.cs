@@ -12,34 +12,35 @@ while (lines.Length > 0)
     boards.Add(new Board(boardLines));
 }
 
-var hasTheWinnerBoard = false;
-for (int n = 0; n < numbers.Length && !hasTheWinnerBoard; n++)
+Board? lastWinnerBoard = null;
+int lastWinnerNumber = 0;
+for (int n = 0; n < numbers.Length; n++)
 {
     var num = numbers[n];
-    for (int b = 0; b < boards.Count && !hasTheWinnerBoard; b++)
+    for (int b = 0; b < boards.Count; b++)
     {
         var board = boards[b];
         var markedNum = board.Mark(num);
         if (markedNum != null)
         {
-            if (board.BingoRow(markedNum))
+            if (!board.IsWinner && (board.BingoRow(markedNum) || board.BingoColumn(markedNum)))
             {
-                var sumOfUnmarked = board.SumOfUnmarkedNumbers();
+                lastWinnerBoard = board.Clone();
+                lastWinnerNumber = markedNum.Value;
+                board.IsWinner = true;
 
-                Console.WriteLine($"The answer is: {sumOfUnmarked * markedNum.Value}");
-                hasTheWinnerBoard = true;
-            }
+                //var sumOfUnmarked2 = lastWinnerBoard?.SumOfUnmarkedNumbers();
+                //Console.WriteLine($"The answer is: {sumOfUnmarked2 * lastWinnerNumber}");
+                //Console.ReadLine();
 
-            if (board.BingoColumn(markedNum))
-            {
-                var sumOfUnmarked = board.SumOfUnmarkedNumbers();
-
-                Console.WriteLine($"The answer is: {sumOfUnmarked * markedNum.Value}");
-                hasTheWinnerBoard = true;
+                Console.WriteLine($"Last winner Number: {lastWinnerNumber}, n: {n}, b: {b}");
             }
         }
     }
 }
+
+var sumOfUnmarked = lastWinnerBoard?.SumOfUnmarkedNumbers();
+Console.WriteLine($"The answer is: {sumOfUnmarked * lastWinnerNumber}");
 
 
 Console.WriteLine(boards.Count);
@@ -62,7 +63,25 @@ class Board
         }
     }
 
+    public Board Clone()
+    { 
+        var clone = new Board(new List<string>());
+
+        for (int row = 0; row < 5; row++)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                clone.Nums[row, i] = new Num(Nums[row, i].Value, row, i);
+                clone.Nums[row, i].IsMarked = Nums[row, i].IsMarked;
+            }
+        }
+
+        return clone;
+    }
+
     public Num[,] Nums { get; set; }
+
+    public bool IsWinner { get; set; }
 
     public Num? Mark(string num)
     {
