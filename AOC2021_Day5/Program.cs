@@ -7,10 +7,9 @@ foreach (var line in lines)
     space.AddLine(line);
 }
 
-Console.WriteLine(space.Points.Where(p => p.Intersects > 1).Count());
+Console.WriteLine(space.Points.Where(p => p.Value > 1).Count());
 
-
-class Point
+struct Point
 {
     public int X { get; set; }
     public int Y { get; set; }
@@ -39,11 +38,16 @@ class Point
     {
         return $"X: {X}; Y: {Y}; I: {Intersects}";
     }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
 }
 
 class Space
 {
-    public List<Point> Points { get; set; } = new List<Point>();
+    public Dictionary<Point, int> Points { get; set; } = new Dictionary<Point, int>();
 
     public void AddLine(string line)
     {
@@ -65,14 +69,13 @@ class Space
 
     private void AddOrUpdatePoint(Point p)
     {
-        var point = Points.FirstOrDefault(pt => pt.Equals(p));
-        if (point != null)
+        if (!Points.ContainsKey(p))
         {
-            point.Intersects++;
+            Points[p] = 1;
         }
         else
         {
-            Points.Add(p);
+            Points[p]++;
         }
     }
 }
