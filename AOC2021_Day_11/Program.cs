@@ -18,9 +18,17 @@ for (int i = 0; i < lines.Length; i++)
 
 var flashes = 0;
 
-for (int i = 0; i < 100; i++)
+for (int i = 0; i < 100000; i++)
 {
-    flashes += Step(octopuses, i + 1);
+    var flashesInStep = Step(octopuses, i + 1);
+    if (flashesInStep == 100)
+    {
+        Console.WriteLine("+++++++++++++++++++++++++++++++++++++++");
+        Console.WriteLine(i);
+        Console.WriteLine("+++++++++++++++++++++++++++++++++++++++");
+        break;
+    }
+    flashes += flashesInStep;
 }
 
 Console.WriteLine();
