@@ -24,7 +24,7 @@ for (int i = 0; i < 100000; i++)
     if (flashesInStep == 100)
     {
         Console.WriteLine("+++++++++++++++++++++++++++++++++++++++");
-        Console.WriteLine(i);
+        Console.WriteLine(i+1);
         Console.WriteLine("+++++++++++++++++++++++++++++++++++++++");
         break;
     }
