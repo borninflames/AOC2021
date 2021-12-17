@@ -1,8 +1,10 @@
 ﻿Console.WriteLine("Hello, Advent of Code 2021!");
 
-var lines = File.ReadAllLines("TestInput.txt");
-//var lines = File.ReadAllLines("Input.txt");
+//var lines = File.ReadAllLines("TestInput2.txt");
+var lines = File.ReadAllLines("Input.txt");
 var caveSystem = new Dictionary<string, Cave>();
+
+List<List<string>> paths = new();
 
 foreach (var line in lines)
 {
@@ -24,35 +26,32 @@ foreach (var line in lines)
 Traverse(caveSystem, caveSystem["start"], new List<string>());
 
 Console.WriteLine(caveSystem["end"].VisitedTimes);
-Console.ReadLine();
 
 
 void Traverse(Dictionary<string, Cave> caveSystem, Cave cave, List<string> visitedCaves)
 {
-    //if ((cave.IsSingleSmall && visitedCaves.Where(c => c == cave.Name).Count() == 2) || (cave.IsSmall && visitedCaves.Contains(cave.Name) && !cave.IsSingleSmall))
-    //{
-    //    return;
-    //}
-    var visitedCount = visitedCaves.Where(c => c == cave.Name).Count();
-    if ((cave.IsSmall && visitedCount == 1 && !cave.IsSingleSmall()) || (cave.IsSingleSmall() && visitedCount == 2))
-    {
-        return;
-    }
     visitedCaves.Add(cave.Name);
     if (cave.IsEnd)
     {
         Console.WriteLine(string.Join(',', visitedCaves));
+        paths.Add(visitedCaves.ToList());
         cave.VisitedTimes++;
-        //Console.ReadKey();
+        return;
     }
-    else
+
+    var hasMultipleSmallCavesVisited = visitedCaves.Any(c => c.ToLower() == c && visitedCaves.Count(v => v == c) == 2);
+
+    var nextCaves = hasMultipleSmallCavesVisited ? 
+        cave.Caves.Where(c => !c.IsSmall || cave.IsEnd || !visitedCaves.Contains(c.Name) && !c.IsStart).ToList() :
+        cave.Caves.Where(c => !c.IsStart).ToList();
+
+    foreach (var c in nextCaves)
     {
-        foreach (var c in cave.Caves)
-        {
-            var newVisitedCaves = new List<string>(visitedCaves);
-            Traverse(caveSystem, c, newVisitedCaves);
-        }
+        var newVisitedCaves = visitedCaves.ToList();
+
+        Traverse(caveSystem, c, newVisitedCaves);
     }
+
 }
 
 class Cave
@@ -61,7 +60,6 @@ class Cave
     {
         Name = name;
         IsSmall = name.ToLower() == name;
-        IsBig = name.ToUpper() == name;
         IsEnd = name == "end";
         IsStart = name == "start";
     }
@@ -69,11 +67,6 @@ class Cave
     public string Name { get; set; }
 
     public bool IsSmall { get; set; }
-    public bool IsBig { get; set; }
-    public bool IsSingleSmall() 
-    {
-        return !IsStart && !IsEnd && !IsBig && Caves.Any(c => c.IsBig);
-    }
     public bool IsEnd { get; set; }
     public bool IsStart { get; set; }
 
